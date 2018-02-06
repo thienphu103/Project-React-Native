@@ -16,7 +16,8 @@ import {
   TextInput,
   Image,
   ScrollView,
-  Alert
+  Alert,
+  ToastAndroid
 } from 'react-native';
 
 import flatListData from '../FlatlistData/flatListData';
@@ -35,6 +36,7 @@ export default class Home extends Component {
   constructor(props) {
     super(props)
     FirebaseDB = firebaseApp.database();
+    bill=FirebaseDB.ref('Bill')
     const { navigate } = this.props.navigation;
     item = [];
     this.state = {
@@ -55,6 +57,7 @@ export default class Home extends Component {
           item: item,
           loading: false,
         });
+        ToastAndroid.show('Loading...', ToastAndroid.SHORT);
       });
     });
   }
@@ -69,6 +72,7 @@ export default class Home extends Component {
   Delele = () => {
     alert('Key');
   }
+  
 
   Show = () => {
     alert('ok')
@@ -77,7 +81,7 @@ export default class Home extends Component {
   render() {
 
     return (
-      <View style={{ backgroundColor: 'white' }} >
+      <View style={{ backgroundColor: 'white',flex:1, }} >
         <View style={styles.header}>
           <TextInput style={styles.input}
             underlineColorAndroid="transparent"
@@ -109,8 +113,9 @@ export default class Home extends Component {
 
           <View style={{ flex: 1, marginBottom: 100 }}>
             <FlatList
-              data={item}
-              renderItem={({ item, index }) => {
+              data={item}           
+              renderItem={({ item,index}) => {
+              
                 console.log(`Item = ${JSON.stringify(item)}, index = ${index}`);
                 return (
                   <FlatListItem item={item} index={index} navigation={this.props.navigation}>
@@ -159,7 +164,14 @@ class FlatListItem extends Component {
             <Text style={{ color: 'red', fontSize: 16, marginTop: 10, }}>{this.props.item.data.Price}</Text>
 
             <TouchableOpacity style={styles.inputButton}
-              onPress={this.Show}>
+              onPress={()=>{
+                bill.push({
+                  Name:this.props.item.data.Name,
+                  Price:this.props.item.data.Price,
+                  Description:this.props.item.data.Description,
+                  ImageURL:this.props.item.data.ImageURL,
+             },()=> alert('Add Product '+this.props.item.data.Name +' To Cart Ok'))
+              }}>
               <Text style={styles.submitButtonText}> Add To Cart  </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.inputButtonShare}
@@ -187,12 +199,7 @@ class FlatListItem extends Component {
               <Text style={styles.submitButtonText}>...</Text>
             </TouchableOpacity>
 
-            <Button
-              onPress={this.Update}
-              title="Learn More"
-              color="#841584"
-              accessibilityLabel="Learn more about this purple button"
-            />
+           
           </View>
         </View>
         <View style={{

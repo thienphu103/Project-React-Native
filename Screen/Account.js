@@ -40,7 +40,7 @@ export default class Account extends Component {
     return (
       <View style={styles.background}>
         <Text>
-          This is a tab account
+          {'Hello: '+ this.props.navigation.state.params.user}
           </Text>
       </View >
 
