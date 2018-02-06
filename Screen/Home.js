@@ -18,6 +18,7 @@ import {
   ScrollView,
   Alert
 } from 'react-native';
+
 import flatListData from '../FlatlistData/flatListData';
 import { firebaseApp } from '../Config/firebase';
 export default class Home extends Component {
@@ -34,19 +35,20 @@ export default class Home extends Component {
   constructor(props) {
     super(props)
     FirebaseDB = firebaseApp.database();
-     item= [];
+    const { navigate } = this.props.navigation;
+    item = [];
     this.state = {
       email: '',
       password: '',
-     
+
     }
   }
   componentWillMount() {
     FirebaseDB.ref('Product').on('value', (spap) => {
-      item= [];
+      item = [];
       spap.forEach((data) => {
         item.push({
-          key:data.key,
+          key: data.key,
           data: data.val(),
         });
         this.setState({
@@ -56,19 +58,24 @@ export default class Home extends Component {
       });
     });
   }
-Add =()=>{
-  alert('Adding...');
-  this.props.navigation.navigate('FormAdd')    
-}
-Delele =()=>{
-  alert('Key');    
-}
+  Add = () => {
+    alert('Adding...');
+    this.props.navigation.navigate('FormAdd')
+  }
+  Update = () => {
+    alert('Adding...');
+    this.props.navigation.navigate('FormUpdate')
+  }
+  Delele = () => {
+    alert('Key');
+  }
 
   Show = () => {
     alert('ok')
     // console.log(this.item)
   }
   render() {
+
     return (
       <View style={{ backgroundColor: 'white' }} >
         <View style={styles.header}>
@@ -91,9 +98,9 @@ Delele =()=>{
             />
           </Text>
           <TouchableOpacity style={styles.AddinputButton}
-              onPress={this.Add}>
-              <Text style={styles.AddsubmitButtonText}> Add  </Text>
-            </TouchableOpacity>
+            onPress={this.Add}>
+            <Text style={styles.AddsubmitButtonText}> Add  </Text>
+          </TouchableOpacity>
           <Text style={{ fontSize: 16, margin: 10, }}>
             Top Product
 
@@ -106,7 +113,7 @@ Delele =()=>{
               renderItem={({ item, index }) => {
                 console.log(`Item = ${JSON.stringify(item)}, index = ${index}`);
                 return (
-                  <FlatListItem item={item} index={index}>
+                  <FlatListItem item={item} index={index} navigation={this.props.navigation}>
                   </FlatListItem>);
               }}
             >
@@ -124,6 +131,7 @@ Delele =()=>{
 
 class FlatListItem extends Component {
   render() {
+
     return (
       <View style={{
 
@@ -136,7 +144,6 @@ class FlatListItem extends Component {
           // backgroundColor: this.props.index % 2 == 0 ? 'mediumseagreen': 'tomato'                
           backgroundColor: 'white'
         }}>
-
           <Image
             source={{ uri: this.props.item.data.ImageURL }}
             style={{ width: 100, height: 100, margin: 5, }}
@@ -147,25 +154,45 @@ class FlatListItem extends Component {
 
             height: 100
           }}>
-            <Text style={{fontWeight:'bold',color:'#000000'}}>{this.props.item.data.Name}</Text>
+            <Text style={{ fontWeight: 'bold', color: '#000000' }}>{this.props.item.data.Name}</Text>
             <Text style={styles.flatListItem}>{this.props.item.data.Description}</Text>
             <Text style={{ color: 'red', fontSize: 16, marginTop: 10, }}>{this.props.item.data.Price}</Text>
-           
+
             <TouchableOpacity style={styles.inputButton}
               onPress={this.Show}>
               <Text style={styles.submitButtonText}> Add To Cart  </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.inputButtonShare}
-              onPress={this.Show}>
+              onPress={() => this.Show}>
               <Text style={styles.submitButtonText}> Share  </Text>
-            </TouchableOpacity> 
+            </TouchableOpacity>
             <TouchableOpacity style={styles.inputButtonDelete}
-               onPress={() => {
-                alert('Remove Product Key: '+this.props.item.key+' Ok!!!');
+              onPress={() => {
+                alert('Remove Product Key: ' + this.props.item.key + ' Ok!!!');
                 FirebaseDB.ref('Product').child(this.props.item.key).remove();
               }}>
               <Text style={styles.submitButtonText}> X  </Text>
-            </TouchableOpacity> 
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.inputButtonUpdate}
+              onPress={() => {
+                this.props.navigation.navigate('FormUpdate',
+                  {
+                    key: this.props.item.key,
+                    name: this.props.item.data.Name,
+                    des: this.props.item.data.Description,
+                    image:this.props.item.data.ImageURL,
+                    price: this.props.item.data.Price
+                  })
+              }}>
+              <Text style={styles.submitButtonText}>...</Text>
+            </TouchableOpacity>
+
+            <Button
+              onPress={this.Update}
+              title="Learn More"
+              color="#841584"
+              accessibilityLabel="Learn more about this purple button"
+            />
           </View>
         </View>
         <View style={{
@@ -203,16 +230,16 @@ const styles = StyleSheet.create({
 
   },
   AddinputButton: {
-    margin:5,
+    margin: 5,
     height: 23,
-    backgroundColor: '#f1c65c',
+    backgroundColor: 'green',
 
 
   },
   inputButton: {
     marginTop: 10,
     height: 23,
-    width: 100,
+    width: 90,
     backgroundColor: '#f1c65c',
 
 
@@ -220,22 +247,33 @@ const styles = StyleSheet.create({
   inputButtonShare: {
     position: 'relative',
     bottom: -1,
-    left: 110,
+    left: 95,
     bottom: 23,
     height: 23,
-    width: 70,
+    width: 60,
     backgroundColor: '#247bbe',
 
   },
 
   inputButtonDelete: {
     position: 'relative',
-    top:-46,
-    left: 190,
+    top: -46,
+    left: 160,
     bottom: 23,
     height: 23,
     width: 30,
     backgroundColor: 'red',
+
+  },
+
+  inputButtonUpdate: {
+    position: 'relative',
+    top: -69,
+    left: 195,
+    bottom: 23,
+    height: 23,
+    width: 30,
+    backgroundColor: 'violet',
 
   },
   AddsubmitButtonText: {
