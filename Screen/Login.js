@@ -20,6 +20,7 @@ import { firebaseApp } from '../Config/firebase';
 export default class Login extends Component {
   static navigationOptions = {
     header: null,
+    headerLeft:null,
   }
   constructor(props) {
     super(props)
@@ -59,8 +60,8 @@ export default class Login extends Component {
           .then(() => {
            
             alert('Login email: ' + email + ' OK. Thanks !!!');
-           
-            this.props.navigation.navigate('TabManager',{user:email})
+            this.props.navigation.navigate('TabManager')
+            // this.props.navigation.navigate('TabManager',{user:email})
           })
           .catch(function (error) {
             alert('Login Fail ,\n' + error);

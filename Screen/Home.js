@@ -57,7 +57,7 @@ export default class Home extends Component {
           item: item,
           loading: false,
         });
-        ToastAndroid.show('Loading...', ToastAndroid.SHORT);
+        // ToastAndroid.show('Loading...', ToastAndroid.SHORT);
       });
     });
   }

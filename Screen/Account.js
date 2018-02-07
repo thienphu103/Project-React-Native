@@ -39,9 +39,9 @@ export default class Account extends Component {
   render() {
     return (
       <View style={styles.background}>
-        <Text>
+        {/* <Text>
           {'Hello: '+ this.props.navigation.state.params.user}
-          </Text>
+          </Text> */}
       </View >
 
 

@@ -59,8 +59,9 @@ export default class Cart extends Component {
         this.setState({
           item: item,
           loading: true,
-          number: '100',
-          price: '1500',
+          number: '0',
+          price:'0',
+      
         });
 
         // 
@@ -82,11 +83,11 @@ export default class Cart extends Component {
 
   Show = () => {
     alert('ok')
-    // console.log(this.item)
+  
   }
   CheckOut = () => {
     alert('Check Out Ok!!!\nThanks For Buy ^^')
-    // console.log(this.item)
+   
   }
   
 
@@ -122,13 +123,14 @@ export default class Cart extends Component {
               // extraData={item}
               // ListEmptyComponent={this.RenderNull}
               // // refreshing={
-              // //   console.log(`Item = ${JSON.stringify(item)}`)}
+             
 
               // // onRefresh={this.Show}
               renderItem={({ item, index }) => {
+                console.log(`Price =`+item.data.Price);
+               
 
-                // console.log(`Item = ${JSON.stringify(item)}, index = ${index}`);
-
+                //console.log(`Item = ${JSON.stringify(item)}`)}
                 return (
                   <FlatListItem item={item} index={index} navigation={this.props.navigation}>
                   </FlatListItem>);
@@ -170,7 +172,7 @@ class FlatListItem extends Component {
               onPress={() => {
                 alert('Remove Ok!!!');
                 FirebaseDB.ref('Bill').child(this.props.item.key).remove();
-                console.log(item)
+              
               
               }}>
               <Text style={styles.submitButtonText}> X  </Text>

@@ -17,7 +17,45 @@ import {
   KeyboardAvoidingView
 } from 'react-native';
 import { firebaseApp } from '../Config/firebase';
+import ImagePicker from 'react-native-image-picker'
+import RNFetchBlob from 'react-native-fetch-blob'
+import UpImage from './UpImage';
 
+const storage = firebaseApp.storage()
+
+// Prepare Blob support
+const Blob = RNFetchBlob.polyfill.Blob
+const fs = RNFetchBlob.fs
+window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+window.Blob = Blob
+
+const uploadImage = (uri, mime = 'jpg') => {
+  return new Promise((resolve, reject) => {
+    const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri
+    const sessionId = new Date().getTime()
+    let uploadBlob = null
+    const imageRef = storage.ref('images').child(`${sessionId}.jpg`)
+
+    fs.readFile(uploadUri, 'base64')
+      .then((data) => {
+        return Blob.build(data, { type: `${mime};BASE64` })
+      })
+      .then((blob) => {
+        uploadBlob = blob
+        return imageRef.put(blob, { contentType: mime })
+      })
+      .then(() => {
+        uploadBlob.close()
+        return imageRef.getDownloadURL()
+      })
+      .then((url) => {
+        resolve(url)
+      })
+      .catch((error) => {
+        reject(error)
+    })
+  })
+}
 export default class FormUpdate extends Component {
   static navigationOptions = {
     header: null,
@@ -40,7 +78,15 @@ export default class FormUpdate extends Component {
   alertItemName = (item) => {
     alert(item)
   }
+  _pickImage() {
+    this.setState({ uploadURL: '' })
 
+    ImagePicker.launchImageLibrary({}, response  => {
+      uploadImage(response.uri)
+        .then(url => this.setState({ imageURL: url }))
+        .catch(error => console.log(error))
+    })
+  }
 
 
   CheckSubmit = () => {
@@ -85,14 +131,11 @@ export default class FormUpdate extends Component {
 
             </View>
             <View style={{ marginTop: 0, }}>
-              <TextInput style={styles.input}
-                underlineColorAndroid="transparent"
-               
-                placeholderTextColor="#ffffff"
-                autoCapitalize="none"
-                value={this.state.imageURL}
-                onChangeText={imageURL => this.setState({ imageURL })}
-              />
+            <TouchableOpacity style={styles.submitButtonAddImage}
+                // onPress={() =>  this.login(this.state.email, this.state.password)
+                onPress={ () => this._pickImage() }>
+                <Text style={styles.submitButtonText}> Upload Image  </Text>
+              </TouchableOpacity>
               <TextInput style={styles.input}
                 underlineColorAndroid="transparent"
                 placeholder="Name"
@@ -167,7 +210,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: 'center',
   },
-
+  submitButtonAddImage: {
+    backgroundColor: '#247bbe',
+    alignSelf: 'center',
+    padding: 10,
+    margin: 15,
+    height: 40,
+    width:150,
+    borderColor: '#ffffff30',
+    borderWidth: 1,
+    alignItems: 'center',
+  },
   checkImageButton: {
     height: 23,
     backgroundColor: '#f1c65c',

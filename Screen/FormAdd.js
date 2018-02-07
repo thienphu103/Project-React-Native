@@ -14,27 +14,80 @@ import {
   FlatList,
   TextInput,
   Image,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  ActivityIndicator
 } from 'react-native';
 import { firebaseApp } from '../Config/firebase';
+import ImagePicker from 'react-native-image-picker'
+import RNFetchBlob from 'react-native-fetch-blob'
+import UpImage from './UpImage';
+
+const storage = firebaseApp.storage()
+
+// Prepare Blob support
+const Blob = RNFetchBlob.polyfill.Blob
+const fs = RNFetchBlob.fs
+window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+window.Blob = Blob
+
+const uploadImage = (uri, mime = 'jpg') => {
+  return new Promise((resolve, reject) => {
+    const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri
+    const sessionId = new Date().getTime()
+    let uploadBlob = null
+    const imageRef = storage.ref('images').child(`${sessionId}.jpg`)
+
+    fs.readFile(uploadUri, 'base64')
+      .then((data) => {
+        return Blob.build(data, { type: `${mime};BASE64` })
+      })
+      .then((blob) => {
+        uploadBlob = blob
+        return imageRef.put(blob, { contentType: mime })
+      })
+      .then(() => {
+        uploadBlob.close()
+        return imageRef.getDownloadURL()
+      })
+      .then((url) => {
+        resolve(url)
+      })
+      .catch((error) => {
+        reject(error)
+    })
+  })
+}
+
+
 
 export default class FormAdd extends Component {
   static navigationOptions = {
     header: null,
   }
+
   constructor(props) {
     super(props)
     this.state = {
       name: '',
       des: '',
-      imageURL:'https://png.icons8.com/ios/2x/xlarge-icons-filled.png',
-      price:'',
-    
+      imageURL: 'https://png.icons8.com/ios/2x/xlarge-icons-filled.png',
+      price: '',
+
     }
     FirebaseDB = firebaseApp.database();
-    product=FirebaseDB.ref('Product')
-  }
+    product = FirebaseDB.ref('Product')
 
+
+  }
+  _pickImage() {
+    this.setState({ uploadURL: '' })
+
+    ImagePicker.launchImageLibrary({}, response  => {
+      uploadImage(response.uri)
+        .then(url => this.setState({ imageURL: url }))
+        .catch(error => console.log(error))
+    })
+  }
   alertItemName = (item) => {
     alert(item)
   }
@@ -49,76 +102,76 @@ export default class FormAdd extends Component {
     if (name == '' || price == '') {
 
       alert('Please Enter Name & Price, Thanks !!!');
-    }  else {
-       product.push({
-            Name:this.state.name,
-            Price:this.state.price,
-            Description:this.state.des,
-            ImageURL:this.state.imageURL,
-       },()=> alert("Add Ok"))
+    } else {
+      product.push({
+        Name: this.state.name,
+        Price: this.state.price,
+        Description: this.state.des,
+        ImageURL: this.state.imageURL,
+      }, () => alert("Add Ok"))
 
 
-      this.props.navigation.navigate('TabManager')       
+      this.props.navigation.navigate('TabManager')
     }
   }
-  
+
 
   render() {
     return (
       <View style={styles.background}>
-       <KeyboardAvoidingView behavior="padding" style={{width: '100%'  
-       , justifyContent: 'center',}}>
-        <View style={styles.container}>
-       
-          <View style={styles.image}>
-            <Image
-              // source={require('../image/image_icon.png')}
-              source={{ uri:this.state.imageURL }}
-              style={{ width: 100, height: 100, margin: 5, }}
-            />
+        <KeyboardAvoidingView behavior="padding" style={{
+          width: '100%'
+          , justifyContent: 'center',
+        }}>
+          <View style={styles.container}>
 
-          </View>
-          <View style={{ marginTop: 0, }}>
-          <TextInput style={styles.input}
-              underlineColorAndroid="transparent"
-              placeholder="imageURL"
-              placeholderTextColor="#ffffff"
-              autoCapitalize="none"
-              onChangeText={imageURL => this.setState({ imageURL })} 
+            <View style={styles.image}>
+              <Image
+                // source={require('../image/image_icon.png')}
+                source={{ uri: this.state.imageURL }}
+                style={{ width: 100, height: 100, margin: 5, }}
               />
-            <TextInput style={styles.input}
-              underlineColorAndroid="transparent"
-              placeholder="Name"
-              placeholderTextColor="#ffffff"
-              autoCapitalize="none"
-              onChangeText={name => this.setState({ name })} 
+
+            </View>
+            <View style={{ marginTop: 0, }}>
+              <TouchableOpacity style={styles.submitButtonAddImage}
+                // onPress={() =>  this.login(this.state.email, this.state.password)
+                onPress={ () => this._pickImage() }>
+                <Text style={styles.submitButtonText}> Upload Image  </Text>
+              </TouchableOpacity>
+              <TextInput style={styles.input}
+                underlineColorAndroid="transparent"
+                placeholder="Name"
+                placeholderTextColor="#ffffff"
+                autoCapitalize="none"
+                onChangeText={name => this.setState({ name })}
               />
               <TextInput style={styles.input}
-              underlineColorAndroid="transparent"
-              placeholder="Price"
-              placeholderTextColor="#ffffff"
-              autoCapitalize="none"
-              onChangeText={price => this.setState({ price })} 
+                underlineColorAndroid="transparent"
+                placeholder="Price"
+                placeholderTextColor="#ffffff"
+                autoCapitalize="none"
+                onChangeText={price => this.setState({ price })}
               />
               <TextInput style={styles.input}
-              underlineColorAndroid="transparent"
-              placeholder="Description"
-              placeholderTextColor="#ffffff"
-              autoCapitalize="none"
-              onChangeText={des => this.setState({ des })} 
+                underlineColorAndroid="transparent"
+                placeholder="Description"
+                placeholderTextColor="#ffffff"
+                autoCapitalize="none"
+                onChangeText={des => this.setState({ des })}
               />
-           
-            <TouchableOpacity style={styles.submitButton}
-              // onPress={() =>  this.login(this.state.email, this.state.password)
-              onPress={this.CheckSubmit}>
-              <Text style={styles.submitButtonText}> Add  </Text>
-            </TouchableOpacity>
-            
 
-        </View>
-      
-      </View >
-       </KeyboardAvoidingView>
+              <TouchableOpacity style={styles.submitButton}
+                // onPress={() =>  this.login(this.state.email, this.state.password)
+                onPress={this.CheckSubmit}>
+                <Text style={styles.submitButtonText}> Add  </Text>
+              </TouchableOpacity>
+
+
+            </View>
+
+          </View >
+        </KeyboardAvoidingView>
       </View >
 
     );
@@ -148,6 +201,18 @@ const styles = StyleSheet.create({
     color: 'white',
 
   },
+  submitButtonAddImage: {
+    backgroundColor: '#247bbe',
+    alignSelf: 'center',
+    padding: 10,
+    margin: 15,
+    height: 40,
+    width:150,
+    borderColor: '#ffffff30',
+    borderWidth: 1,
+    alignItems: 'center',
+  },
+
   submitButton: {
     backgroundColor: '#247bbe',
     padding: 10,
