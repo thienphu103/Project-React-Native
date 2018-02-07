@@ -13,7 +13,8 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
-  Image
+  Image,
+  Alert
 } from 'react-native';
 import { firebaseApp } from '../Config/firebase';
 
@@ -58,9 +59,22 @@ export default class Login extends Component {
       } else {
         firebaseApp.auth().signInWithEmailAndPassword(email, password)
           .then(() => {
-           
-            alert('Login email: ' + email + ' OK. Thanks !!!');
-            this.props.navigation.navigate('TabManager')
+            Alert.alert(
+              'Login',
+              'Login email: ' + email + ' OK. Thanks !!!',
+              [
+              
+                // {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                {text: 'OK', onPress: () => this.props.navigation.navigate('TabManager',{user:email})},
+              ],
+              { cancelable: false }
+            )
+
+
+
+
+            // alert('Login email: ' + email + ' OK. Thanks !!!');
+            // // this.props.navigation.navigate('TabManager')
             // this.props.navigation.navigate('TabManager',{user:email})
           })
           .catch(function (error) {

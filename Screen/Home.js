@@ -36,7 +36,7 @@ export default class Home extends Component {
   constructor(props) {
     super(props)
     FirebaseDB = firebaseApp.database();
-    bill=FirebaseDB.ref('Bill')
+    bill = FirebaseDB.ref('Bill')
     const { navigate } = this.props.navigation;
     item = [];
     this.state = {
@@ -72,7 +72,7 @@ export default class Home extends Component {
   Delele = () => {
     alert('Key');
   }
-  
+
 
   Show = () => {
     alert('ok')
@@ -81,7 +81,7 @@ export default class Home extends Component {
   render() {
 
     return (
-      <View style={{ backgroundColor: 'white',flex:1, }} >
+      <View style={{ backgroundColor: 'white', flex: 1, }} >
         <View style={styles.header}>
           <TextInput style={styles.input}
             underlineColorAndroid="transparent"
@@ -113,9 +113,9 @@ export default class Home extends Component {
 
           <View style={{ flex: 1, marginBottom: 100 }}>
             <FlatList
-              data={item}           
-              renderItem={({ item,index}) => {
-              
+              data={item}
+              renderItem={({ item, index }) => {
+
                 console.log(`Item = ${JSON.stringify(item)}, index = ${index}`);
                 return (
                   <FlatListItem item={item} index={index} navigation={this.props.navigation}>
@@ -164,13 +164,13 @@ class FlatListItem extends Component {
             <Text style={{ color: 'red', fontSize: 16, marginTop: 10, }}>{this.props.item.data.Price}</Text>
 
             <TouchableOpacity style={styles.inputButton}
-              onPress={()=>{
+              onPress={() => {
                 bill.push({
-                  Name:this.props.item.data.Name,
-                  Price:this.props.item.data.Price,
-                  Description:this.props.item.data.Description,
-                  ImageURL:this.props.item.data.ImageURL,
-             },()=> alert('Add Product '+this.props.item.data.Name +' To Cart Ok'))
+                  Name: this.props.item.data.Name,
+                  Price: this.props.item.data.Price,
+                  Description: this.props.item.data.Description,
+                  ImageURL: this.props.item.data.ImageURL,
+                }, () => alert('Add Product ' + this.props.item.data.Name + ' To Cart Ok'))
               }}>
               <Text style={styles.submitButtonText}> Add To Cart  </Text>
             </TouchableOpacity>
@@ -180,26 +180,26 @@ class FlatListItem extends Component {
             </TouchableOpacity>
             <TouchableOpacity style={styles.inputButtonDelete}
               onPress={() => {
-                alert('Remove Product Key: ' + this.props.item.key + ' Ok!!!');
-                FirebaseDB.ref('Product').child(this.props.item.key).remove();
-              }}>
-              <Text style={styles.submitButtonText}> X  </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.inputButtonUpdate}
-              onPress={() => {
                 this.props.navigation.navigate('FormUpdate',
                   {
                     key: this.props.item.key,
                     name: this.props.item.data.Name,
                     des: this.props.item.data.Description,
-                    image:this.props.item.data.ImageURL,
+                    image: this.props.item.data.ImageURL,
                     price: this.props.item.data.Price
                   })
               }}>
-              <Text style={styles.submitButtonText}>...</Text>
+              <Text style={styles.submitButtonText}> Edit  </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.inputButtonUpdate}
+              onPress={() => {
+                alert('Remove Product Key: ' + this.props.item.key + ' Ok!!!');
+                FirebaseDB.ref('Product').child(this.props.item.key).remove();
+              }}>
+              <Text style={styles.submitButtonText}>X</Text>
             </TouchableOpacity>
 
-           
+
           </View>
         </View>
         <View style={{
@@ -268,19 +268,19 @@ const styles = StyleSheet.create({
     left: 160,
     bottom: 23,
     height: 23,
-    width: 30,
-    backgroundColor: 'red',
+    width: 40,
+    backgroundColor: 'violet',
 
   },
 
   inputButtonUpdate: {
     position: 'relative',
     top: -69,
-    left: 195,
+    left: 205,
     bottom: 23,
     height: 23,
     width: 30,
-    backgroundColor: 'violet',
+    backgroundColor: 'red',
 
   },
   AddsubmitButtonText: {

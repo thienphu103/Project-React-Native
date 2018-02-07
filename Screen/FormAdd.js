@@ -82,7 +82,7 @@ export default class FormAdd extends Component {
   _pickImage() {
     this.setState({ uploadURL: '' })
 
-    ImagePicker.launchImageLibrary({}, response  => {
+    ImagePicker.showImagePicker({}, response  => {
       uploadImage(response.uri)
         .then(url => this.setState({ imageURL: url }))
         .catch(error => console.log(error))

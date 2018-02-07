@@ -13,7 +13,8 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
-  Image
+  Image,
+  KeyboardAvoidingView
 } from 'react-native';
 
 
@@ -33,17 +34,40 @@ export default class Account extends Component {
     this.state = {
       email: '',
       password: '',
-
+      user:'usercustomer@gmail.com',
     }
+
+    
   }
+  
+   
+
   render() {
     return (
       <View style={styles.background}>
-        {/* <Text>
-          {'Hello: '+ this.props.navigation.state.params.user}
-          </Text> */}
-      </View >
+         <View>
+         <KeyboardAvoidingView behavior="padding" style={{width: '100%'  
+       ,height:'100%', justifyContent: 'center',}}>
+        <View style={styles.container}>
+       
+          <View style={styles.image}>
+            <Image
+              source={require('../image/icon-profile.png')}
+              style={{ alignItems: 'center',marginTop:30, }}
+            />
+             <Text style={{fontSize:20, color:'white',marginTop:20,fontWeight:'bold'}}>
+              {this.state.user}
+            </Text>
 
+            <Text style={{fontSize:14, color:'white',marginTop:5,}}>
+            Customer 
+            </Text>
+          
+          </View>
+          </View>
+          </KeyboardAvoidingView>
+      </View >
+      </View >
 
     );
   }
@@ -51,14 +75,18 @@ export default class Account extends Component {
 
 const styles = StyleSheet.create({
   background: {
-    flex: 1,
+   
     backgroundColor: '#ffffff',
   },
   container: {
-    marginTop: 100,
-
+    marginTop: -130,
   },
 
+  image: {
+    marginTop: -220,
+    alignItems: 'center',
+    backgroundColor: '#247bbe',
+  },
   icon: {
     width: 15,
     height: 15,
