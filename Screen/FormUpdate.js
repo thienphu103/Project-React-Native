@@ -95,9 +95,9 @@ export default class FormUpdate extends Component {
     const { price } = this.state;
     const { imageURL } = this.state;
     const { key } = this.state;
-    if (name == '' || price == '') {
+    if (name == '' || price == ''|| des=='') {
 
-      alert('Please Enter Name & Price, Thanks !!!');
+      alert('Please Enter Characters In Form \n{Name:Description:Price} Not Null, Thanks !!!');
     } else {
       alert('Update Product Key: ' + key + ' Ok!!!');
       FirebaseDB.ref('Product').child(key).update({
@@ -121,7 +121,10 @@ export default class FormUpdate extends Component {
           , justifyContent: 'center',
         }}>
           <View style={styles.container}>
+          <View style={styles.header}>
+          <Text style={styles.inputHeader}> {'Add Product: '+this.state.name} </Text>
 
+        </View >
             <View style={styles.image}>
               <Image
                 // source={require('../image/image_icon.png')}
@@ -139,7 +142,7 @@ export default class FormUpdate extends Component {
               <TextInput style={styles.input}
                 underlineColorAndroid="transparent"
                 placeholder="Name"
-                placeholderTextColor="#ffffff"
+                placeholderTextColor="#ffffff80"
                 autoCapitalize="none"
                 value={this.state.name}
                 onChangeText={name => this.setState({ name })}
@@ -147,7 +150,7 @@ export default class FormUpdate extends Component {
               <TextInput style={styles.input}
                 underlineColorAndroid="transparent"
                 placeholder="Price"
-                placeholderTextColor="#ffffff"
+                placeholderTextColor="#ffffff80"
                 autoCapitalize="none"
                 value={this.state.price}
                 onChangeText={price => this.setState({ price })}
@@ -155,7 +158,7 @@ export default class FormUpdate extends Component {
               <TextInput style={styles.input}
                 underlineColorAndroid="transparent"
                 placeholder="Description"
-                placeholderTextColor="#ffffff"
+                placeholderTextColor="#ffffff80"
                 autoCapitalize="none"
                 value={this.state.des}
                 onChangeText={des => this.setState({ des })}
@@ -187,6 +190,19 @@ const styles = StyleSheet.create({
     marginTop: 100,
 
   },
+  header: {
+    height: 60,
+    backgroundColor: '#247bbe',
+    position:'absolute',
+    top:-100,
+  },
+  inputHeader: {
+    fontWeight: 'bold',
+    margin: 15,
+    height: 30,
+    fontSize: 20,
+    color: 'white',
+  },
   footer: {
     marginTop: 20,
     height: 80,
@@ -197,6 +213,7 @@ const styles = StyleSheet.create({
   input: {
     margin: 15,
     height: 40,
+
     backgroundColor: '#3e8ac880',
     color: 'white',
 
@@ -264,7 +281,7 @@ const styles = StyleSheet.create({
 
   },
   image: {
-    marginTop: -80,
+    marginTop: -30,
     alignItems: 'center',
   },
 });

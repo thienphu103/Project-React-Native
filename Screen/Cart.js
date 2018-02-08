@@ -152,7 +152,7 @@ class FlatListItem extends Component {
   render() {
 
     return (
-      <View style={{ flexDirection: 'column', }}>
+      <View style={{ flexDirection: 'column',  borderBottomWidth:1,}}>
         <View style={{ flexDirection: 'row', backgroundColor: 'white' }}>
           <Image
             source={{ uri: this.props.item.data.ImageURL }}
@@ -184,7 +184,7 @@ class FlatListItem extends Component {
           height: 1,
           backgroundColor: 'white'
         }}>
-          <View style={{ borderWidth: 0.3, }} />
+          {/* <View style={{ borderWidth: 0.3, }} /> */}
         </View>
 
       </View>

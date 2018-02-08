@@ -95,7 +95,7 @@ export default class Home extends Component {
           />
         </View >
 
-        <ScrollView >
+       
           <Text>
             <Image
               source={require('../image/banner.png')}
@@ -110,7 +110,7 @@ export default class Home extends Component {
 
 
           </Text>
-
+          <ScrollView >
           <View style={{ flex: 1, marginBottom: 100 }}>
             <FlatList
               data={item}
@@ -138,27 +138,14 @@ class FlatListItem extends Component {
   render() {
 
     return (
-      <View style={{
-
-        flexDirection: 'column',
-
-      }}>
-        <View style={{
-
-          flexDirection: 'row',
-          // backgroundColor: this.props.index % 2 == 0 ? 'mediumseagreen': 'tomato'                
-          backgroundColor: 'white'
-        }}>
+      <View style={{flexDirection: 'column',borderBottomWidth:1,}}>
+        <View style={{flexDirection: 'row',backgroundColor: 'white'}}>
           <Image
             source={{ uri: this.props.item.data.ImageURL }}
             style={{ width: 100, height: 100, margin: 5, }}
           >
           </Image>
-          <View style={{
-
-
-            height: 100
-          }}>
+          <View style={{height: 100 }}>
             <Text style={{ fontWeight: 'bold', color: '#000000' }}>{this.props.item.data.Name}</Text>
             <Text style={styles.flatListItem}>{this.props.item.data.Description}</Text>
             <Text style={{ color: 'red', fontSize: 16, marginTop: 10, }}>{this.props.item.data.Price}</Text>
@@ -206,7 +193,7 @@ class FlatListItem extends Component {
           height: 1,
           backgroundColor: 'white'
         }}>
-          <View style={{ borderWidth: 0.3, }} />
+          {/* <View style={{ borderWidth: 0.3, }} /> */}
         </View>
 
       </View>

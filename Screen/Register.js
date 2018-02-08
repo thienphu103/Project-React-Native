@@ -85,7 +85,7 @@ export default class Register extends Component {
             <TextInput style={styles.input}
               underlineColorAndroid="transparent"
               placeholder="Email"
-              placeholderTextColor="#ffffff"
+              placeholderTextColor="#ffffff80"
               autoCapitalize="none"
               onChangeText={email => this.setState({ email })} 
              />
@@ -93,7 +93,7 @@ export default class Register extends Component {
             <TextInput style={styles.input}
               underlineColorAndroid="transparent"
               placeholder="Password"
-              placeholderTextColor="#ffffff"
+              placeholderTextColor="#ffffff80"
               autoCapitalize="none"
               secureTextEntry={true}
               onChangeText={password => this.setState({ password })} 
@@ -102,7 +102,7 @@ export default class Register extends Component {
             <TextInput style={styles.input}
               underlineColorAndroid="transparent"
               placeholder="Confirm Password"
-              placeholderTextColor="#ffffff"
+              placeholderTextColor="#ffffff80"
               autoCapitalize="none"
               secureTextEntry={true}
               onChangeText={repassword => this.setState({ repassword })} 

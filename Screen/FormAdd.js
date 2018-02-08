@@ -99,9 +99,9 @@ export default class FormAdd extends Component {
     const { des } = this.state;
     const { price } = this.state;
     const { imageURL } = this.state;
-    if (name == '' || price == '') {
+    if (name == '' || price == ''|| des=='') {
 
-      alert('Please Enter Name & Price, Thanks !!!');
+      alert('Please Enter Characters In Form \n{Name:Description:Price} Not Null, Thanks !!!');
     } else {
       product.push({
         Name: this.state.name,
@@ -124,7 +124,10 @@ export default class FormAdd extends Component {
           , justifyContent: 'center',
         }}>
           <View style={styles.container}>
+          <View style={styles.header}>
+          <Text style={styles.inputHeader}> Add Product </Text>
 
+        </View >
             <View style={styles.image}>
               <Image
                 // source={require('../image/image_icon.png')}
@@ -142,21 +145,21 @@ export default class FormAdd extends Component {
               <TextInput style={styles.input}
                 underlineColorAndroid="transparent"
                 placeholder="Name"
-                placeholderTextColor="#ffffff"
+                placeholderTextColor="#ffffff80"
                 autoCapitalize="none"
                 onChangeText={name => this.setState({ name })}
               />
               <TextInput style={styles.input}
                 underlineColorAndroid="transparent"
                 placeholder="Price"
-                placeholderTextColor="#ffffff"
+                placeholderTextColor="#ffffff80"
                 autoCapitalize="none"
                 onChangeText={price => this.setState({ price })}
               />
               <TextInput style={styles.input}
                 underlineColorAndroid="transparent"
                 placeholder="Description"
-                placeholderTextColor="#ffffff"
+                placeholderTextColor="#ffffff80"
                 autoCapitalize="none"
                 onChangeText={des => this.setState({ des })}
               />
@@ -185,6 +188,20 @@ const styles = StyleSheet.create({
   },
   container: {
     marginTop: 100,
+
+  },
+  header: {
+    height: 60,
+    backgroundColor: '#247bbe',
+    position:'absolute',
+    top:-100,
+  },
+  inputHeader: {
+    fontWeight: 'bold',
+    margin: 15,
+    height: 30,
+    fontSize: 20,
+    color: 'white',
 
   },
   footer: {
@@ -266,7 +283,7 @@ const styles = StyleSheet.create({
 
   },
   image: {
-    marginTop: -80,
+    marginTop: -50,
     alignItems: 'center',
   },
 });
