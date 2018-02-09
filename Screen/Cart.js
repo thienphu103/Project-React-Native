@@ -86,6 +86,7 @@ export default class Cart extends Component {
   
   }
   CheckOut = () => {
+    this.props.navigation.navigate('Home')
     alert('Check Out Ok!!!\nThanks For Buy ^^')
    
   }
@@ -170,10 +171,14 @@ class FlatListItem extends Component {
             </TouchableOpacity>
             <TouchableOpacity style={styles.inputButtonShare}
               onPress={() => {
-                alert('Remove Ok!!!');
-                FirebaseDB.ref('Bill').child(this.props.item.key).remove();
-              
-              
+                this.props.navigation.navigate('FormCartDelete',
+                {
+                  key: this.props.item.key,
+                  name: this.props.item.data.Name,
+                  des: this.props.item.data.Description,
+                  image: this.props.item.data.ImageURL,
+                  price: this.props.item.data.Price
+                })
               }}>
               <Text style={styles.submitButtonText}> X  </Text>
             </TouchableOpacity>

@@ -14,7 +14,8 @@ import {
   FlatList,
   TextInput,
   Image,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Alert
 } from 'react-native';
 import { firebaseApp } from '../Config/firebase';
 import ImagePicker from 'react-native-image-picker'
@@ -56,7 +57,7 @@ const uploadImage = (uri, mime = 'jpg') => {
     })
   })
 }
-export default class FormUpdate extends Component {
+export default class FormDelete extends Component {
   static navigationOptions = {
     header: null,
   }
@@ -99,16 +100,19 @@ export default class FormUpdate extends Component {
 
       alert('Please Enter Characters In Form \n{Name:Description:Price} Not Null, Thanks !!!');
     } else {
-      alert('Update Product Key: ' + key + ' Ok!!!');
-      FirebaseDB.ref('Product').child(key).update({
-        Name: this.state.name,
-        Price: this.state.price,
-        Description: this.state.des,
-        ImageURL: this.state.imageURL,
-      }, () => alert("Update Ok"))
-
-
-      this.props.navigation.navigate('TabManager')
+      Alert.alert(
+        'Remove',
+        'Remove Product Name: ' + name + ' ?',
+        [
+        
+          {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+          {text: 'OK', onPress: () => {
+            FirebaseDB.ref('Product').child(key).remove();
+            this.props.navigation.navigate('TabManager')
+          }},
+        ],
+        { cancelable: false }
+      )
     }
   }
 
@@ -122,7 +126,7 @@ export default class FormUpdate extends Component {
         }}>
           <View style={styles.container}>
           <View style={styles.header}>
-          <Text style={styles.inputHeader}> {'Update Product: '+this.state.name} </Text>
+          <Text style={styles.inputHeader}> {'Delete Product: '+this.state.name} </Text>
 
         </View >
             <View style={styles.image}>
@@ -134,11 +138,11 @@ export default class FormUpdate extends Component {
 
             </View>
             <View style={{ marginTop: 0, }}>
-            <TouchableOpacity style={styles.submitButtonAddImage}
+            {/* <TouchableOpacity style={styles.submitButtonAddImage}
                 // onPress={() =>  this.login(this.state.email, this.state.password)
                 onPress={ () => this._pickImage() }>
                 <Text style={styles.submitButtonText}> Upload Image  </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <TextInput style={styles.input}
                 underlineColorAndroid="transparent"
                 placeholder="Name"
@@ -167,7 +171,7 @@ export default class FormUpdate extends Component {
               <TouchableOpacity style={styles.submitButton}
                 // onPress={() =>  this.login(this.state.email, this.state.password)
                 onPress={this.CheckSubmit}>
-                <Text style={styles.submitButtonText}> Update  </Text>
+                <Text style={styles.submitButtonText}> Delete  </Text>
               </TouchableOpacity>
 
 

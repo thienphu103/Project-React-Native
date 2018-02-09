@@ -13,12 +13,17 @@ import {
 } from 'react-native';
 import { StackNavigator, TabBarBottom } from 'react-navigation';
 import Login from './Screen/Login';
+import Register from './Screen/Register';
 import TabManager from './Screen/TabManager';
 import FormAdd from './Screen/FormAdd';
 import FormUpdate from './Screen/FormUpdate';
-import Register from './Screen/Register';
+import FormHomeDelete from './Screen/FormHomeDelete';
+import FormCartDelete from './Screen/FormCartDelete';
+import Home from './Screen/Home';
+import Cart from './Screen/Cart';
+
 export default class App extends React.Component {
-  
+
 
   render() {
     return (
@@ -34,6 +39,10 @@ const AppNavigator = StackNavigator({
   Register: { screen: Register },
   FormAdd: { screen: FormAdd },
   FormUpdate: { screen: FormUpdate },
+  FormHomeDelete: { screen: FormHomeDelete },
+  FormCartDelete: { screen: FormCartDelete },
+  Home: { screen: Home },
+  Cart: { screen: Home },
 
 
 });

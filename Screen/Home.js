@@ -180,8 +180,14 @@ class FlatListItem extends Component {
             </TouchableOpacity>
             <TouchableOpacity style={styles.inputButtonUpdate}
               onPress={() => {
-                alert('Remove Product Key: ' + this.props.item.key + ' Ok!!!');
-                FirebaseDB.ref('Product').child(this.props.item.key).remove();
+                this.props.navigation.navigate('FormHomeDelete',
+                  {
+                    key: this.props.item.key,
+                    name: this.props.item.data.Name,
+                    des: this.props.item.data.Description,
+                    image: this.props.item.data.ImageURL,
+                    price: this.props.item.data.Price
+                  })
               }}>
               <Text style={styles.submitButtonText}>X</Text>
             </TouchableOpacity>
