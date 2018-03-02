@@ -108,7 +108,7 @@ export default class FormUpdate extends Component {
       }, () => alert("Update Ok"))
 
 
-      this.props.navigation.navigate('TabManager')
+      this.props.navigation.navigate('Home')
     }
   }
 

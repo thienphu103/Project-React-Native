@@ -17,19 +17,18 @@ import {
   Image,
   ScrollView,
   Alert,
-  ToastAndroid,
-  RefreshControl
+  ToastAndroid
 } from 'react-native';
 
 import flatListData from '../FlatlistData/flatListData';
 import { firebaseApp } from '../Config/firebase';
-export default class Cart extends Component {
+export default class HomeGuest extends Component {
   static navigationOptions = {
     header: null,
-    tabBarLabel: 'Cart',
+    tabBarLabel: 'Home',
     tabBarIcon: ({ tintColor }) => (
       <Image
-        source={require('../image/icon-cart.png')}
+        source={require('../image/icon-home.png')}
         style={[styles.icon, { tintColor: tintColor }]}
       />
     ),
@@ -37,19 +36,17 @@ export default class Cart extends Component {
   constructor(props) {
     super(props)
     FirebaseDB = firebaseApp.database();
+    bill = FirebaseDB.ref('Bill')
     const { navigate } = this.props.navigation;
-    const item = [];
+    item = [];
     this.state = {
       email: '',
       password: '',
-      number: '',
-      price: '',
-    }
 
+    }
   }
   componentWillMount() {
-
-    FirebaseDB.ref('Bill').on('value', (spap) => {
+    FirebaseDB.ref('Product').on('value', (spap) => {
       item = [];
       spap.forEach((data) => {
         item.push({
@@ -58,13 +55,8 @@ export default class Cart extends Component {
         });
         this.setState({
           item: item,
-          loading: true,
-          number: '0',
-          price:'0',
-      
+          loading: false,
         });
-
-        // 
         // ToastAndroid.show('Loading...', ToastAndroid.SHORT);
       });
     });
@@ -81,57 +73,50 @@ export default class Cart extends Component {
     alert('Key');
   }
 
+
   Show = () => {
     alert('ok')
-  
+    // console.log(this.item)
   }
-  CheckOut = () => {
-    this.props.navigation.navigate('HomeGuest')
-    alert('Check Out Ok!!!\nThanks For Buy ^^')
-   
-  }
-  
-
   render() {
 
     return (
-
       <View style={{ backgroundColor: 'white', flex: 1, }} >
         <View style={styles.header}>
-          <Text style={styles.input}> Shopping Cart </Text>
-
+          <TextInput style={styles.input}
+            underlineColorAndroid="transparent"
+            placeholder="aMarket Search..."
+            placeholderTextColor="#ffffff"
+            autoCapitalize="none"
+            onChangeText={email => this.setState({ email })} />
+          <Image
+            source={require('../image/icon-search.png')}
+            style={{ position: "absolute", left: 310, top: 22, }}
+          />
         </View >
 
+       
+          <Text>
+            <Image
+              source={require('../image/banner.png')}
+            />
+          </Text>
+          {/* <TouchableOpacity style={styles.AddinputButton}
+            onPress={this.Add}>
+            <Text style={styles.AddsubmitButtonText}> Add  </Text>
+          </TouchableOpacity> */}
+          <Text style={{ fontSize: 16, margin: 10, }}>
+            Top Product
 
 
-        <Text style={{ fontSize: 14, margin: 10, }}>
-          {'Item: ' + this.state.number}
-        </Text>
-
-        <Text style={{ fontSize: 14, margin: 10, color: 'red', position: 'absolute', top: 60, right: 30, }}>
-          {'Order Total: ' + this.state.price + ' VND'}
-        </Text>
-
-        <TouchableOpacity style={styles.AddinputButton}
-          onPress={this.CheckOut}>
-          <Text style={styles.AddsubmitButtonText}> CHECK OUT  </Text>
-        </TouchableOpacity>
-        <ScrollView >
-
-          <View style={{ flex: 1, marginBottom: 100, marginTop: 10 }}>
+          </Text>
+          <ScrollView >
+          <View style={{ flex: 1, marginBottom: 100 }}>
             <FlatList
               data={item}
-              // extraData={item}
-              // ListEmptyComponent={this.RenderNull}
-              // // refreshing={
-             
-
-              // // onRefresh={this.Show}
               renderItem={({ item, index }) => {
-                console.log(`Price =`+item.data.Price);
-               
 
-                //console.log(`Item = ${JSON.stringify(item)}`)}
+                console.log(`Item = ${JSON.stringify(item)}, index = ${index}`);
                 return (
                   <FlatListItem item={item} index={index} navigation={this.props.navigation}>
                   </FlatListItem>);
@@ -153,35 +138,60 @@ class FlatListItem extends Component {
   render() {
 
     return (
-      <View style={{ flexDirection: 'column',  borderBottomWidth:1,}}>
-        <View style={{ flexDirection: 'row', backgroundColor: 'white' }}>
+      <View style={{flexDirection: 'column',borderBottomWidth:1,}}>
+        <View style={{flexDirection: 'row',backgroundColor: 'white'}}>
           <Image
             source={{ uri: this.props.item.data.ImageURL }}
             style={{ width: 100, height: 100, margin: 5, }}
           >
           </Image>
-          <View style={{ height: 100 }}>
+          <View style={{height: 100 }}>
             <Text style={{ fontWeight: 'bold', color: '#000000' }}>{this.props.item.data.Name}</Text>
             <Text style={styles.flatListItem}>{this.props.item.data.Description}</Text>
             <Text style={{ color: 'red', fontSize: 16, marginTop: 10, }}>{this.props.item.data.Price}</Text>
 
             <TouchableOpacity style={styles.inputButton}
-              onPress={this.Show}>
-              <Text style={styles.submitButtonText}> Share  </Text>
+              onPress={() => {
+                bill.push({
+                  Name: this.props.item.data.Name,
+                  Price: this.props.item.data.Price,
+                  Description: this.props.item.data.Description,
+                  ImageURL: this.props.item.data.ImageURL,
+                }, () => alert('Add Product ' + this.props.item.data.Name + ' To Cart Ok'))
+              }}>
+              <Text style={styles.submitButtonText}> Add To Cart  </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.inputButtonShare}
-              onPress={() => {
-                this.props.navigation.navigate('FormCartDelete',
-                {
-                  key: this.props.item.key,
-                  name: this.props.item.data.Name,
-                  des: this.props.item.data.Description,
-                  image: this.props.item.data.ImageURL,
-                  price: this.props.item.data.Price
-                })
-              }}>
-              <Text style={styles.submitButtonText}> X  </Text>
+              onPress={() => this.Show}>
+              <Text style={styles.submitButtonText}> Share  </Text>
             </TouchableOpacity>
+            {/* <TouchableOpacity style={styles.inputButtonDelete}
+              onPress={() => {
+                this.props.navigation.navigate('FormUpdate',
+                  {
+                    key: this.props.item.key,
+                    name: this.props.item.data.Name,
+                    des: this.props.item.data.Description,
+                    image: this.props.item.data.ImageURL,
+                    price: this.props.item.data.Price
+                  })
+              }}>
+              <Text style={styles.submitButtonText}> Edit  </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.inputButtonUpdate}
+              onPress={() => {
+                this.props.navigation.navigate('FormHomeDelete',
+                  {
+                    key: this.props.item.key,
+                    name: this.props.item.data.Name,
+                    des: this.props.item.data.Description,
+                    image: this.props.item.data.ImageURL,
+                    price: this.props.item.data.Price
+                  })
+              }}>
+              <Text style={styles.submitButtonText}>X</Text>
+            </TouchableOpacity> */}
+
 
           </View>
         </View>
@@ -201,7 +211,7 @@ class FlatListItem extends Component {
 
 const styles = StyleSheet.create({
   header: {
-    height: 60,
+    height: 70,
     backgroundColor: '#247bbe',
   },
   container: {
@@ -213,17 +223,16 @@ const styles = StyleSheet.create({
 
   },
   input: {
-    fontWeight: 'bold',
     margin: 15,
-    height: 30,
-    fontSize: 20,
+    height: 40,
+    backgroundColor: '#3e8ac880',
     color: 'white',
 
   },
   AddinputButton: {
-    margin: 2,
-    height: 40,
-    backgroundColor: 'orange',
+    margin: 5,
+    height: 23,
+    backgroundColor: 'green',
 
 
   },
@@ -231,7 +240,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     height: 23,
     width: 90,
-    backgroundColor: '#247bbe',
+    backgroundColor: '#f1c65c',
 
 
   },
@@ -241,8 +250,9 @@ const styles = StyleSheet.create({
     left: 95,
     bottom: 23,
     height: 23,
-    width: 30,
-    backgroundColor: 'red',
+    width: 60,
+    backgroundColor: '#247bbe',
+
   },
 
   inputButtonDelete: {
@@ -251,29 +261,28 @@ const styles = StyleSheet.create({
     left: 160,
     bottom: 23,
     height: 23,
-    width: 30,
-    backgroundColor: 'red',
+    width: 40,
+    backgroundColor: 'violet',
 
   },
 
   inputButtonUpdate: {
     position: 'relative',
     top: -69,
-    left: 195,
+    left: 205,
     bottom: 23,
     height: 23,
     width: 30,
-    backgroundColor: 'violet',
+    backgroundColor: 'red',
 
   },
   AddsubmitButtonText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 15,
     alignSelf: 'center',
     alignItems: 'center',
     position: 'relative',
-    bottom: -10,
+    bottom: -1,
   },
   submitButtonText: {
     color: 'white',

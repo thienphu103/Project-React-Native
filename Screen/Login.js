@@ -17,7 +17,8 @@ import {
   Alert
 } from 'react-native';
 import { firebaseApp } from '../Config/firebase';
-
+FirebaseDB = firebaseApp.database();
+account = FirebaseDB.ref('Account')
 export default class Login extends Component {
   static navigationOptions = {
     header: null,
@@ -41,8 +42,28 @@ export default class Login extends Component {
   //   alert('email : ' + email + '| password: ' + pass)
   // }
 
-  alertItemName = (item) => {
-    alert(item)
+  UploadAccount = () => {
+    
+    FirebaseDB.ref('Account').child('-L6ZEbmhcNJN7dhXEqep').update({
+
+      Email: 'Name: Name',
+      Image:'https://caravetclinic.com/wp/wp-content/uploads/2016/07/person-icon-blue.png',
+      
+    })
+    FirebaseDB.ref('Account').child('-L6ZamIrYdMsVDH5tnuv').update({
+
+      Email: 'Phone: 01235073266',
+      Image:'https://images.vexels.com/media/users/3/140965/isolated/preview/a945eef28564ae85fff5ac18adf637d9-phone-round-icon-by-vexels.png',
+      
+    })
+   
+    FirebaseDB.ref('Account').child('-L6ZamIw6CO6mN2ozwc7').update({
+
+
+      Email: 'Address: Q 3, TP: HCM',
+      Image:'https://cdn1.iconfinder.com/data/icons/ui-5/502/address-512.png',
+      
+    })
   }
   CheckLogin = () => {
     const { email } = this.state;
@@ -59,20 +80,48 @@ export default class Login extends Component {
       } else {
         firebaseApp.auth().signInWithEmailAndPassword(email, password)
           .then(() => {
-            Alert.alert(
-              'Login',
-              'Login email: ' + email + ' OK. Thanks !!!',
-              [
-              
-                // {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                {text: 'OK', onPress: () => this.props.navigation.navigate('TabManager',{user:email})},
-              ],
-              { cancelable: false }
-            )
+           this.UploadAccount();
 
+           FirebaseDB.ref('Account').child('-L6ZEbmhcNJN7dhXEqep').update({
+    
+            Email: 'Name:'+email.substring(0, email.indexOf('@')),
+            Image:'https://caravetclinic.com/wp/wp-content/uploads/2016/07/person-icon-blue.png',
+            
+          })
 
+           FirebaseDB.ref('Account').child('-L6ZamIvw4_afAEcGvb_').update({
 
+            User:email,
+            Email: 'Email: '+email,
+            Image:'https://cdn3.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-1/254000/67-512.png',
+            
+          })
+            if(email=="thienphu103@gmail.com"){
+              Alert.alert(
+                'Login Admin ',
+                'Login email: ' + email + ' OK. Thanks !!!',
+                [
+                
+                  // {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                  {text: 'OK', onPress: () => 
+                  this.props.navigation.navigate('Home')},
+                ],
+                { cancelable: false }
+              )
 
+            }else{
+              Alert.alert(
+                'Login Guest',
+                'Login email: ' + email + ' OK. Thanks !!!',
+                [
+                
+                  // {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                  {text: 'OK', onPress: () => 
+                  this.props.navigation.navigate('TabManager')},
+                ],
+                { cancelable: false }
+              )
+            }
             // alert('Login email: ' + email + ' OK. Thanks !!!');
             // // this.props.navigation.navigate('TabManager')
             // this.props.navigation.navigate('TabManager',{user:email})

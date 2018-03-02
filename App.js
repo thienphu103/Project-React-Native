@@ -21,6 +21,7 @@ import FormHomeDelete from './Screen/FormHomeDelete';
 import FormCartDelete from './Screen/FormCartDelete';
 import Home from './Screen/Home';
 import Cart from './Screen/Cart';
+import HomeGuest from './Screen/HomeGuest';
 
 export default class App extends React.Component {
 
@@ -42,7 +43,9 @@ const AppNavigator = StackNavigator({
   FormHomeDelete: { screen: FormHomeDelete },
   FormCartDelete: { screen: FormCartDelete },
   Home: { screen: Home },
+  HomeGuest: { screen: HomeGuest },
   Cart: { screen: Home },
+  
 
 
 });

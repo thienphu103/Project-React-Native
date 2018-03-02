@@ -96,11 +96,12 @@ export default class Home extends Component {
         </View >
 
        
-          <Text>
+         
             <Image
-              source={require('../image/banner.png')}
+              source={require('../image/admin-banner.jpg')}
+              style={{ height:60,width:380, }}
             />
-          </Text>
+        
           <TouchableOpacity style={styles.AddinputButton}
             onPress={this.Add}>
             <Text style={styles.AddsubmitButtonText}> Add  </Text>
@@ -150,7 +151,7 @@ class FlatListItem extends Component {
             <Text style={styles.flatListItem}>{this.props.item.data.Description}</Text>
             <Text style={{ color: 'red', fontSize: 16, marginTop: 10, }}>{this.props.item.data.Price}</Text>
 
-            <TouchableOpacity style={styles.inputButton}
+            {/* <TouchableOpacity style={styles.inputButton}
               onPress={() => {
                 bill.push({
                   Name: this.props.item.data.Name,
@@ -160,7 +161,7 @@ class FlatListItem extends Component {
                 }, () => alert('Add Product ' + this.props.item.data.Name + ' To Cart Ok'))
               }}>
               <Text style={styles.submitButtonText}> Add To Cart  </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity style={styles.inputButtonShare}
               onPress={() => this.Show}>
               <Text style={styles.submitButtonText}> Share  </Text>
@@ -236,40 +237,30 @@ const styles = StyleSheet.create({
 
 
   },
-  inputButton: {
+
+  inputButtonShare: {
     marginTop: 10,
     height: 23,
     width: 90,
-    backgroundColor: '#f1c65c',
-
-
-  },
-  inputButtonShare: {
-    position: 'relative',
-    bottom: -1,
-    left: 95,
-    bottom: 23,
-    height: 23,
-    width: 60,
     backgroundColor: '#247bbe',
 
   },
 
   inputButtonDelete: {
     position: 'relative',
-    top: -46,
-    left: 160,
+    top: -23,
+    left: 95,
     bottom: 23,
     height: 23,
-    width: 40,
+    width: 45,
     backgroundColor: 'violet',
 
   },
 
   inputButtonUpdate: {
     position: 'relative',
-    top: -69,
-    left: 205,
+    top: -46,
+    left: 145,
     bottom: 23,
     height: 23,
     width: 30,

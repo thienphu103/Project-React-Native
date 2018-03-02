@@ -108,7 +108,7 @@ export default class FormDelete extends Component {
           {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
           {text: 'OK', onPress: () => {
             FirebaseDB.ref('Product').child(key).remove();
-            this.props.navigation.navigate('TabManager')
+            this.props.navigation.navigate('Home')
           }},
         ],
         { cancelable: false }

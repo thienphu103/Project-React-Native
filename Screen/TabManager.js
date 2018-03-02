@@ -2,12 +2,12 @@ import { TabNavigator } from "react-navigation";
 
 //import your tabs js file
 import Login from './Login';
-import Home from './Home';
+import HomeGuest from './HomeGuest';
 import Cart from './Cart'
 import Account from './Account'
 var TabManager = TabNavigator({
   // here you will define your screen-tabs
-  Home: { screen: Home },
+  HomeGuest: { screen: HomeGuest },
   Cart: { screen: Cart },
   Account: { screen: Account },
 },

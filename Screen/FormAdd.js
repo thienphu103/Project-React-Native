@@ -111,7 +111,7 @@ export default class FormAdd extends Component {
       }, () => alert("Add Ok"))
 
 
-      this.props.navigation.navigate('TabManager')
+      this.props.navigation.navigate('Home')
     }
   }
 
