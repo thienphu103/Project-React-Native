@@ -65,6 +65,9 @@ export default class Home extends Component {
     alert('Adding...');
     this.props.navigation.navigate('FormAdd')
   }
+  SignOut = () => {
+    this.props.navigation.navigate('Login')
+  }
   Update = () => {
     alert('Adding...');
     this.props.navigation.navigate('FormUpdate')
@@ -88,42 +91,80 @@ export default class Home extends Component {
             placeholder="aMarket Search..."
             placeholderTextColor="#ffffff"
             autoCapitalize="none"
+
             onChangeText={email => this.setState({ email })} />
           <Image
             source={require('../image/icon-search.png')}
-            style={{ position: "absolute", left: 310, top: 22, }}
+            style={{ position: "absolute", left: 290, top: 22, }}
           />
-        </View >
 
-       
-         
+          <TouchableOpacity style={{ position: "absolute", left: 330, top: 24, }}
+
+            onPress={() => {
+              Alert.alert(
+                'Logout',
+                'Are You Sure Logout ???',
+
+                [
+                  { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                  { text: 'OK', onPress: () => this.props.navigation.navigate('Login') },
+                ],
+                { cancelable: false }
+              )
+            }}>
             <Image
-              source={require('../image/admin-banner.jpg')}
-              style={{ height:60,width:380, }}
+              source={require('../image/icon-off.png')}
+              
+
             />
-        
-          <TouchableOpacity style={styles.AddinputButton}
-            onPress={this.Add}>
-            <Text style={styles.AddsubmitButtonText}> Add  </Text>
+
           </TouchableOpacity>
-          <Text style={{ fontSize: 16, margin: 10, }}>
-            Top Product
 
 
+
+        </View >
+        <Image
+          source={require('../image/admin-banner.jpg')}
+          style={{ height: 60, width: 380, }}
+        />
+
+        {/* <TouchableOpacity style={styles.SignOutButton}
+                  onPress={() => {
+                    Alert.alert(
+                      'Logout',
+                      'Are You Sure Logout ???',
+
+                      [
+                        { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                        { text: 'OK', onPress: () => this.props.navigation.navigate('Login') },
+                      ],
+                      { cancelable: false }
+                    )
+                  }}>
+                  <Text style={{ fontSize: 14, fontWeight: "bold", color: 'blue', marginTop: 5, marginBottom: 10, textDecorationLine: "underline" }}>
+                    Sign Out
+            </Text>
+                </TouchableOpacity> */}
+
+        <TouchableOpacity style={styles.AddinputButton}
+          onPress={this.Add}>
+          <Text style={styles.AddsubmitButtonText}> Add  </Text>
+        </TouchableOpacity>
+
+        <Text style={{ fontSize: 16, margin: 10, }}>
+          Top Product
           </Text>
-          <ScrollView >
+        <ScrollView>
           <View style={{ flex: 1, marginBottom: 100 }}>
             <FlatList
               data={item}
               renderItem={({ item, index }) => {
-
                 console.log(`Item = ${JSON.stringify(item)}, index = ${index}`);
                 return (
                   <FlatListItem item={item} index={index} navigation={this.props.navigation}>
                   </FlatListItem>);
               }}
             >
-
             </FlatList>
           </View>
 
@@ -139,14 +180,14 @@ class FlatListItem extends Component {
   render() {
 
     return (
-      <View style={{flexDirection: 'column',borderBottomWidth:1,}}>
-        <View style={{flexDirection: 'row',backgroundColor: 'white'}}>
+      <View style={{ flexDirection: 'column', borderBottomWidth: 1, }}>
+        <View style={{ flexDirection: 'row', backgroundColor: 'white' }}>
           <Image
             source={{ uri: this.props.item.data.ImageURL }}
             style={{ width: 100, height: 100, margin: 5, }}
           >
           </Image>
-          <View style={{height: 100 }}>
+          <View style={{ height: 100 }}>
             <Text style={{ fontWeight: 'bold', color: '#000000' }}>{this.props.item.data.Name}</Text>
             <Text style={styles.flatListItem}>{this.props.item.data.Description}</Text>
             <Text style={{ color: 'red', fontSize: 16, marginTop: 10, }}>{this.props.item.data.Price}</Text>
@@ -225,6 +266,7 @@ const styles = StyleSheet.create({
   },
   input: {
     margin: 15,
+    width: 310,
     height: 40,
     backgroundColor: '#3e8ac880',
     color: 'white',
@@ -238,11 +280,28 @@ const styles = StyleSheet.create({
 
   },
 
+  SignOutinputButton: {
+
+    height: 30,
+
+
+
+  },
+
   inputButtonShare: {
     marginTop: 10,
     height: 23,
     width: 90,
     backgroundColor: '#247bbe',
+
+  },
+  SignOutButton: {
+    marginTop: 10,
+    height: 23,
+    width: 90,
+    alignSelf: 'center',
+    alignItems: 'center',
+
 
   },
 
@@ -275,6 +334,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     bottom: -1,
   },
+
   submitButtonText: {
     color: 'white',
     fontWeight: 'bold',
